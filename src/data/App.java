@@ -71,7 +71,7 @@ public class App extends Thread{
         
         
         sede.eliminarEmpleado();
-        
+        sede.modificarSueldoEmpleado();
         System.out.println("" + sede + "\n\n" + sede2);
     }
 }

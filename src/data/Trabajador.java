@@ -51,6 +51,8 @@ public class Trabajador {
     }
 
     public void setSueldo(double sueldo) {
+        if(sueldo < 1000 || sueldo > 100000)
+            throw new Exception("")
         this.sueldo = sueldo;
     }
 

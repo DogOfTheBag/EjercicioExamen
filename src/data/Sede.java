@@ -53,8 +53,17 @@ public class Sede {
         return false;
     }
     
-    public boolean modificarSueldoEmpleado(int ID, double Sueldo){
-        
+    public boolean modificarSueldoEmpleado(){
+        String stringID = JOptionPane.showInputDialog(null, this.getTrabajadores() + "\n Introduce el ID del trabajador al modificar");
+        int id = Integer.parseInt(stringID);
+        String stringSueldo = JOptionPane.showInputDialog("Introduce el nuevo sueldo");
+        double sueldo = Double.parseDouble(stringSueldo);
+        for (Trabajador t : trabajadores) {
+            if(t.getID() == id){
+                t.setSueldo(sueldo);
+                return true;
+            }
+        }
         return false;
     }
 
