@@ -11,14 +11,16 @@ public class Trabajador {
     private final int ID;
     private String nombre;
     private double sueldo;
+    private int horasTrabajadas;
     private ActiRealizada actividad;
     
     private int sedeID;
 
-    public Trabajador(String nombre, double sueldo, ActiRealizada actividad, int sedeID) {
+    public Trabajador(String nombre, double sueldo, int horasTrabajadas, ActiRealizada actividad, int sedeID) {
         this.ID = Trabajador.contadorID++;
         this.nombre = nombre;
         this.sueldo = sueldo;
+        this.horasTrabajadas = horasTrabajadas;
         this.actividad = actividad;
         this.sedeID = sedeID;
     }
@@ -50,9 +52,9 @@ public class Trabajador {
         return sueldo;
     }
 
-    public void setSueldo(double sueldo) {
+    public void setSueldo(double sueldo) throws Exception {
         if(sueldo < 1000 || sueldo > 100000)
-            throw new Exception("")
+            throw new Exception("");
         this.sueldo = sueldo;
     }
 
@@ -72,9 +74,15 @@ public class Trabajador {
         this.sedeID = sedeID;
     }
 
+    public int getHorasTrabajadas() {
+        return horasTrabajadas;
+    }
+
+    
     @Override
     public String toString() {
-        return "\nTrabajador " + ID + ", de nombre: " + nombre + ", con un sueldo de " + sueldo + ", que hace la siguiente actividad: " + actividad + ", que trabaja en la sede: " + getSedeID();
+        return "\nTrabajador " + ID + ", de nombre: " + nombre + ", con un sueldo de " + sueldo + ", que ha trabajado " 
+                + horasTrabajadas + " horas, que hace la siguiente actividad: " + actividad;
     }
     
     

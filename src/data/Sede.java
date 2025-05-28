@@ -2,9 +2,14 @@ package data;
 
 import data.enums.ActiRealizada;
 import data.enums.Continente;
+import data.enums.FormaOrdenar;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,20 +21,24 @@ public class Sede {
     
     private final int ID;
     private final String NOM;
+    int tuberiasReparadas;
+    int tuberiasInstaladas;
     List <Trabajador> trabajadores;
     Continente continente;
 
-    public Sede(String NOM, Continente continente) {
+    public Sede(String NOM, Continente continente, int reparadas, int instaladas) {
         this.ID = contadorID++;
         this.NOM = NOM;
         this.continente = continente;
+        this.tuberiasReparadas = reparadas;
+        this.tuberiasInstaladas = instaladas;
         trabajadores = new LinkedList();
     }
     
-    public boolean añadirTrabajador(String nombre, double sueldo, ActiRealizada actividad, int sedeID) throws Exception{
+    public boolean añadirTrabajador(String nombre, double sueldo, int horasTrabajadas, ActiRealizada actividad, int sedeID) throws Exception{
         boolean añadido;
         if(Trabajador.trabajadorEsValido(nombre, sueldo)){
-            trabajadores.add(new Trabajador(nombre,sueldo,actividad,sedeID));
+            trabajadores.add(new Trabajador(nombre,sueldo,horasTrabajadas,actividad,sedeID));
             añadido = true;
             return true;
         }
@@ -60,11 +69,32 @@ public class Sede {
         double sueldo = Double.parseDouble(stringSueldo);
         for (Trabajador t : trabajadores) {
             if(t.getID() == id){
-                t.setSueldo(sueldo);
+                try {
+                    t.setSueldo(sueldo);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                    Logger.getLogger(Sede.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 return true;
             }
         }
         return false;
+    }
+    public String listadoTrabajadoresOrdenados(FormaOrdenar ordenacion){
+        List <Trabajador> trabajadoresOrdenados = new ArrayList(this.getTrabajadores());
+       
+        switch(ordenacion){
+            case FormaOrdenar.SUELDO -> trabajadoresOrdenados.sort(Comparator.comparingDouble(Trabajador::getSueldo));
+            case FormaOrdenar.NOMBRE -> trabajadoresOrdenados.sort(Comparator.comparing(Trabajador::getNombre));
+            case FormaOrdenar.ACTIVIDAD -> trabajadoresOrdenados.sort(Comparator.comparing(Trabajador::getActividad));
+        }
+        StringBuilder listaOrdenada = new StringBuilder("Listado ordenado de trabajadores según " + ordenacion + "\n");
+        
+        for (Trabajador t : trabajadoresOrdenados) {
+            listaOrdenada.append(t.toString()).append("\n");
+        }
+        
+        return listaOrdenada.toString();
     }
 
     public int getID() {
@@ -77,7 +107,7 @@ public class Sede {
 
     @Override
     public String toString() {
-        return "Sede "+ ID + ", de nombre " + NOM + ", ubicada en " + continente + ", con los siguientes trabajadores:" + trabajadores;
+        return "Sede "+ ID + ", de nombre " + NOM + ", ubicada en " + continente + ", con los siguientes trabajadores:" + trabajadores.toString() + "\n";
     }
 
     
